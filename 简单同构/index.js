@@ -9,7 +9,7 @@ const server = express();
 server.get('/', (req, res) => {
   // 通过createSSRApp创建一个vue实例
   const app = createApp();
-  
+
   // 通过renderToString将vue实例渲染成字符串
   renderToString(app).then((html) => {
     // 将字符串插入到html模板中
