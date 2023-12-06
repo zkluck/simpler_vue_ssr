@@ -15,13 +15,16 @@ server.get('/', async (req, res) => {
   if (app._component.asyncData) {
     initData = await app._component.asyncData();
   }
-  
+
   // 这个接口获取的图片是随机的,如果浏览器的图片地址和这里一致
   // 说明浏览器没有触发二次渲染，同构成功
   console.log("当前的图片地址是:" + JSON.stringify(initData));
 
+  app._component.data = () => ({ imgs: initData })
+
   // 通过renderToString将vue实例渲染成字符串
   renderToString(app).then((html) => {
+    console.log(html)
     // 将字符串插入到html模板中
     // 通过一个script标签将初始化数据挂载到window.__INITIAL_DATA__上
     const htmlStr = `
@@ -32,7 +35,8 @@ server.get('/', async (req, res) => {
           <script type="importmap">
           {
             "imports": {
-              "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+              "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js",
+              "axios": "./node_modules/axios/dist/esm/axios.min.js"
             }
           }
           </script>
